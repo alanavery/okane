@@ -9,11 +9,22 @@ datasource db {
 }
 
 model Account {
-  id String @id @default(cuid())
-  name String
-  startingBalance Decimal 
-  creditAccount Boolean
-  creditLimit Decimal
-  user
-  userId String
+  id              String  @id @default(cuid())
+  name            String
+  startingBalance Decimal
+  creditAccount   Boolean
+  creditLimit     Decimal
+  user            User?   @relation(fields: [userId], references: [id])
+  userId          String?
+}
+
+model User {
+  id        String    @id @default(cuid())
+  name      String?
+  email     String?   @unique
+  createdAt DateTime  @default(now()) @map(name: "created_at")
+  updatedAt DateTime  @updatedAt @map(name: "updated_at")
+  accounts  Account[]
+
+  @@map(name: "users")
 }
